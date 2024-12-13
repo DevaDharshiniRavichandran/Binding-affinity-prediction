@@ -1,0 +1,141 @@
+import os
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from keras.models import Model
+from keras.layers import Input, Dense, Dropout, BatchNormalization, concatenate, Activation
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from keras.callbacks import EarlyStopping, CSVLogger
+
+# Helper function for one-hot encoding
+def one_hot_encode(sequence, max_length, vocab):
+    encoding = np.zeros((max_length, len(vocab)))
+    for i, char in enumerate(sequence):
+        if i < max_length and char in vocab:
+            encoding[i, vocab.index(char)] = 1
+    return encoding
+
+# Function to preprocess data
+def load_data(tcr_file, max_epitope_length=15, max_tcr_length=30):
+    tcr_data = pd.read_csv(tcr_file, header=None)
+
+    # Vocabulary for one-hot encoding (all unique characters in sequences)
+    vocab = sorted(set("".join(tcr_data[0]) + "".join(tcr_data[1])))
+
+    # Encode epitope sequences
+    epi_sequences = tcr_data.iloc[:, 0].dropna()
+    epi_embeddings = np.array([one_hot_encode(seq, max_epitope_length, vocab) for seq in epi_sequences])
+
+    # Encode TCR sequences
+    tcr_sequences = tcr_data.iloc[:, 1].dropna()
+    tcr_embeddings = np.array([one_hot_encode(seq, max_tcr_length, vocab) for seq in tcr_sequences])
+
+    # Process binding labels
+    binding = tcr_data.iloc[:, 2].dropna().values.astype(int)
+
+    # Ensure all arrays have the same length
+    min_len = min(len(epi_embeddings), len(tcr_embeddings), len(binding))
+    epi_embeddings = epi_embeddings[:min_len]
+    tcr_embeddings = tcr_embeddings[:min_len]
+    binding = binding[:min_len]
+
+    return epi_embeddings, tcr_embeddings, binding
+
+# Function to train the model
+def train_model(epi_embeddings, tcr_embeddings, binding):
+    # Flatten the one-hot encoded arrays for input to the dense layers
+    epi_embeddings = epi_embeddings.reshape(epi_embeddings.shape[0], -1)
+    tcr_embeddings = tcr_embeddings.reshape(tcr_embeddings.shape[0], -1)
+
+    # Split the data
+    train_size = int(0.8 * len(binding))
+    X1_train, X2_train, y_train = epi_embeddings[:train_size], tcr_embeddings[:train_size], binding[:train_size]
+    X1_test, X2_test, y_test = epi_embeddings[train_size:], tcr_embeddings[train_size:], binding[train_size:]
+
+    # Define the model
+    inputA = Input(shape=(X1_train.shape[1],))
+    inputB = Input(shape=(X2_train.shape[1],))
+
+    x = Dense(1024, kernel_initializer='he_uniform', activation='relu')(inputA)
+    y = Dense(1024, kernel_initializer='he_uniform', activation='relu')(inputB)
+
+    combined = concatenate([x, y])
+    z = Dense(512, activation='relu')(combined)
+    z = Dense(1, activation='sigmoid')(z)
+
+    model = Model(inputs=[inputA, inputB], outputs=z)
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Model summary
+    model.summary()
+
+    # Callbacks: EarlyStopping and ModelCheckpoint
+    checkpoint_filepath = 'tcr_modified_model_checkpoint.weights.h5'
+    model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+        filepath=checkpoint_filepath,
+        save_weights_only=True,
+        monitor='val_loss',
+        mode='min',
+        save_best_only=True
+    )
+
+    # Callbacks: EarlyStopping and CSVLogger to save training history
+    es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10)
+    csv_logger = CSVLogger('TCR_mod_training_history.csv', append=False)
+
+    # Train the model
+    history = model.fit([X1_train, X2_train], y_train, 
+                        validation_split=0.1, 
+                        epochs=100, 
+                        batch_size=64, 
+                        callbacks=[es, csv_logger], 
+                        verbose=1)
+
+
+    # Save the trained model
+    model.save('tcr_modified_model.h5')
+
+    # Evaluate the model on the test set
+    yhat = model.predict([X1_test, X2_test])
+    print('================Performance========================')
+    auc = roc_auc_score(y_test, yhat)
+    yhat_binary = (yhat >= 0.5).astype(int)
+    accuracy = accuracy_score(y_test, yhat_binary)
+    precision1 = precision_score(y_test, yhat_binary, pos_label=1, zero_division=0)
+    precision0 = precision_score(y_test, yhat_binary, pos_label=0, zero_division=0)
+    recall1 = recall_score(y_test, yhat_binary, pos_label=1, zero_division=0)
+    recall0 = recall_score(y_test, yhat_binary, pos_label=0, zero_division=0)
+    f1macro = f1_score(y_test, yhat_binary, average='macro')
+    f1micro = f1_score(y_test, yhat_binary, average='micro')
+
+    # Print metrics to console
+    print(f'AUC: {auc}')
+    print(f'Accuracy: {accuracy}')
+    print(f'Precision (Class 1): {precision1}')
+    print(f'Precision (Class 0): {precision0}')
+    print(f'Recall (Class 1): {recall1}')
+    print(f'Recall (Class 0): {recall0}')
+    print(f'F1 Macro: {f1macro}')
+    print(f'F1 Micro: {f1micro}')
+
+    # Save performance metrics to a file
+    with open('TCR_mod_validation_performance.txt', 'w') as f:
+        f.write('Performance on Validation Data:\n')
+        f.write(f'AUC: {auc}\n')
+        f.write(f'Accuracy: {accuracy}\n')
+        f.write(f'Precision (Class 1): {precision1}\n')
+        f.write(f'Precision (Class 0): {precision0}\n')
+        f.write(f'Recall (Class 1): {recall1}\n')
+        f.write(f'Recall (Class 0): {recall0}\n')
+        f.write(f'F1 Macro: {f1macro}\n')
+        f.write(f'F1 Micro: {f1micro}\n')
+
+# Main function
+def main():
+    tcr_file = 'tcr_train.csv'
+
+    epi_embeddings, tcr_embeddings, binding = load_data(tcr_file)
+    train_model(epi_embeddings, tcr_embeddings, binding)
+
+if __name__ == '__main__':
+    main()
