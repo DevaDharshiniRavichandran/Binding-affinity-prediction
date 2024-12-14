@@ -28,9 +28,3 @@ ATM-TCR demonstrates how a multi-head self-attention based model can be utilized
 
 <li> Lee, C., et al. ATM-TCR: Deep Learning-Based TCR-Peptide Binding Prediction. GitHub repository, 2023. https://github.com/Lee-CBG/ATM-TCR/tree/main.</li>
 </ul>
-
-[![CC BY 4.0][cc-by-image]][cc-by]
-
-[cc-by]: http://creativecommons.org/licenses/by/4.0/
-[cc-by-image]: https://i.creativecommons.org/l/by/4.0/88x31.png
-[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
