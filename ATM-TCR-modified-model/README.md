@@ -12,9 +12,29 @@ Published in: [**Frontiers in Immunology, 2022.**](https://www.frontiersin.org/a
 
 ## Model Structure
 
-The model takes a pair epitope and TCR sequences as input and returns the binding affinity between the two. The sequences are processing through an embedding layer before reaching the mutli-head self-attention layer. The outputs of these layers are then concatenated and fed through a linear decoder layer to receive the final binding affinity score.
+The model takes a pair epitope and TCR sequences as input and returns the binding affinity between the two. The sequences are processed through an embedding layer before reaching the multi-head self-attention layer. The outputs of these layers are then concatenated and fed through a linear decoder layer to receive the final binding affinity score.
 
 <img src="data/fig/model.png" alt="drawing" width="500"/>
+
+**Modified Architecture:**
+
+<img src="data/fig/modified_model.png" alt="modified model" width="500"/>
+
+### Modifications Made:
+1. **Incorporation of Additional Activation Functions:**
+   - Added a ReLU activation function after one of the linear layers in the decoder to introduce non-linearity and enhance feature learning.
+   - Used a Sigmoid activation function at the final output layer to produce a probability score for binary classification.
+
+2. **Enhanced Data Normalization:**
+   - Applied normalization to the concatenated embeddings of TCR and epitope sequences before passing them to the decoder.
+
+3. **Custom Loss Function:**
+   - Integrated a weighted binary cross-entropy loss function to address class imbalance issues in the training data.
+
+4. **Extended Performance Metrics:**
+   - Added evaluation metrics such as Matthews Correlation Coefficient (MCC) and Cohen’s Kappa to provide a more comprehensive assessment of model performance.
+
+---
 
 ## Requirements
 Written using Python 3.8.10
@@ -72,6 +92,7 @@ Loss        Accuracy Precision1 Precision0 Recall1 Recall0 F1Macro F1Micro AUC
 Epitope     TCR	        Actual Prediction Binding Affinity
 GLCTLVAML	CASCWNYEQYF	1	   1	      0.9996516704559326
 ```
+
 ## Testing
 To make a prediction using a pre-trained model
 ```
