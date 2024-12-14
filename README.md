@@ -16,7 +16,7 @@ The model takes a pair epitope and TCR sequences as input and returns the bindin
 
 <img src="ATM-TCR-modified-model/data/fig/model.png" alt="drawing" width="500"/>
 
-**Modified Model Architecture:**
+##Modified Model Architecture:
 
 <img src="ATM-TCR-modified-model/data/fig/modified.png" alt="modified model" width="500"/>
 
