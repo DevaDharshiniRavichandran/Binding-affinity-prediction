@@ -76,7 +76,7 @@ def main():
                         help = 'train or test')
     parser.add_argument('--save_model', type=str2bool, default=True,
                         help = 'save model')
-    parser.add_argument('--model', type=str, default='attention',
+    parser.add_argument('--model', type=str, default='modified_model',
                         help='Model to import')
     parser.add_argument('--drop_rate', type=float, default=0.25,
                         help='dropout rate')
