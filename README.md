@@ -25,6 +25,6 @@ ATM-TCR demonstrates how a multi-head self-attention based model can be utilized
 ## References
 <ul>
 <li> Lee, C. H., Kang, H., Sung, G., Choi, Y. S., Kim, D., Kim, H. S., & Kang, C. Y. (2022). ATM-TCR: Robust deep learning-based TCR-pMHC binding affinity prediction for T-cell immunity. Frontiers in Immunology, 13, 893247. https://doi.org/10.3389/fimmu.2022.893247 </li>
-
 <li> Lee, C., et al. ATM-TCR: Deep Learning-Based TCR-Peptide Binding Prediction. GitHub repository, 2023. https://github.com/Lee-CBG/ATM-TCR/tree/main.</li>
+<li>Lee, C., et al. catELMo: Contextualized Embeddings for Protein Sequence Analysis. GitHub repository, 2023. https://github.com/Lee-CBG/catELMo/blob/main/bap.py.</li>
 </ul>
