@@ -4,20 +4,7 @@
 
 ATM-TCR demonstrates how a multi-head self-attention based model can be utilized to learn structural information from protein sequences to make binding affinity predictions.
 
-## Publication
-<b>ATM-TCR: TCR-Epitope Binding Affinity Prediction Using a Multi-Head Self-Attention Model</b> <br/>
-[Michael Cai](https://github.com/cai-michael)<sup>1,2</sup>, [Seojin Bang](https://github.com/SeojinBang)<sup>2</sup>, [Pengfei Zhang](https://github.com/pzhang84)<sup>1,2</sup>, [Heewook Lee](https://scai.engineering.asu.edu/faculty/computer-science-and-engineering/heewook-lee/)<sup>1,2</sup><br/>
-<sup>1 </sup>School of Computing and Augmented Intelligence, Arizona State University, <sup>2 </sup>Biodesign Institute, Arizona State University <br/>
-Published in: [**Frontiers in Immunology, 2022.**](https://www.frontiersin.org/articles/10.3389/fimmu.2022.893247/full)
-
-## Model Structure
-
-The model takes a pair epitope and TCR sequences as input and returns the binding affinity between the two. The sequences are processed through an embedding layer before reaching the multi-head self-attention layer. The outputs of these layers are then concatenated and fed through a linear decoder layer to receive the final binding affinity score.
-
-<img src="ATM-TCR-modified-model/data/fig/model.png" alt="drawing" width="500"/>
-
 ## Modified Model Architecture:
-
 <img src="ATM-TCR-modified-model/data/fig/modified.png" alt="modified model" width="500"/>
 
 ### Modifications Made:
@@ -35,12 +22,12 @@ The model takes a pair epitope and TCR sequences as input and returns the bindin
    - Added evaluation metrics such as Matthews Correlation Coefficient (MCC) and Cohen’s Kappa to provide a more comprehensive assessment of model performance.
 
 
-## License
+## References
+<ul>
+<li> Lee, C. H., Kang, H., Sung, G., Choi, Y. S., Kim, D., Kim, H. S., & Kang, C. Y. (2022). ATM-TCR: Robust deep learning-based TCR-pMHC binding affinity prediction for T-cell immunity. Frontiers in Immunology, 13, 893247. https://doi.org/10.3389/fimmu.2022.893247 </li>
 
-Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
-
-This work is licensed under a
-[Creative Commons Attribution 4.0 International License][cc-by].
+<li> Lee, C., et al. ATM-TCR: Deep Learning-Based TCR-Peptide Binding Prediction. GitHub repository, 2023. https://github.com/Lee-CBG/ATM-TCR/tree/main.</li>
+</ul>
 
 [![CC BY 4.0][cc-by-image]][cc-by]
 
