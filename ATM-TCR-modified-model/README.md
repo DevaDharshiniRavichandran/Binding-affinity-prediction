@@ -16,9 +16,9 @@ The model takes a pair epitope and TCR sequences as input and returns the bindin
 
 <img src="data/fig/model.png" alt="drawing" width="500"/>
 
-**Modified Architecture:**
+**Modified Model Architecture:**
 
-<img src="data/fig/modified_model.png" alt="modified model" width="500"/>
+<img src="data/fig/modified.png" alt="modified model" width="500"/>
 
 ### Modifications Made:
 1. **Incorporation of Additional Activation Functions:**
