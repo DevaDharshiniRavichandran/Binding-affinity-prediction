@@ -14,11 +14,11 @@ Published in: [**Frontiers in Immunology, 2022.**](https://www.frontiersin.org/a
 
 The model takes a pair epitope and TCR sequences as input and returns the binding affinity between the two. The sequences are processed through an embedding layer before reaching the multi-head self-attention layer. The outputs of these layers are then concatenated and fed through a linear decoder layer to receive the final binding affinity score.
 
-<img src="data/fig/model.png" alt="drawing" width="500"/>
+<img src="ATM-TCR-modified-model/data/fig/model.png" alt="drawing" width="500"/>
 
 **Modified Model Architecture:**
 
-<img src="data/fig/modified.png" alt="modified model" width="500"/>
+<img src="ATM-TCR-modified-model/data/fig/modified.png" alt="modified model" width="500"/>
 
 ### Modifications Made:
 1. **Incorporation of Additional Activation Functions:**
