@@ -1,0 +1,50 @@
+# Notebook Checkpoints #
+########################
+.ipynb_checkpoints
+
+# Pycache #
+###########
+/__pycache__
+
+# Virtual Environment #
+###########
+/tcr-env
+
+# VS Code Configuration Files #
+###############################
+/.vscode
+
+# Data Files #
+##############
+data/iedb_mhc_class_ii.csv
+data/iedb_mhc_class_i.csv
+data/McPAS-TCR.csv
+data/VDJDB.tsv
+data/netTCR_data.txt
+data/tcrgp_data.txt
+data/sample_data.csv
+data/combined_dataset_positive_only.csv
+data/combined_dataset_old_2021.csv
+data/combined_dataset_positive_only_old_2021.csv
+data/combined_metadata.csv
+data/epitope_distribution.csv
+data/tcr_distribution.csv
+data/full_information_positive_only.csv
+data/BM_data_formatted.csv
+data/autoencoder_data.csv
+data/autoencoder_sample_data.csv
+data/covid19test.csv
+data/ergo_training_data.csv
+data/ergo_2_training_data.csv
+data/blosum/ELMo_embeds_combined_dataset.pkl
+tsne
+
+# Data Indexing Files #
+#######################
+data/*_data_shuffle.txt
+
+# Output Files #
+################
+/result
+/models
+/autoencoder
